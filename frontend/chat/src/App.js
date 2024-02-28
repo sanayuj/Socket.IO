@@ -1,9 +1,11 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
-import nanoid from "nanoid";
+import {nanoid} from "nanoid";
 
 const socket = io.connect("http://localhost:4000");
+
+const userName=nanoid(4)
 
 function App() {
   const [message, setMessage] = useState("");
@@ -11,7 +13,7 @@ function App() {
 
   const sendChat=(e)=>{
     e.preventDefault()
-    socket.emit("chat",{message})
+    socket.emit("chat",{message,userName})
     setMessage("")
   }
 
@@ -25,7 +27,7 @@ function App() {
       <header className="App-header">
         <h1>Chat </h1>
         {chat.map((value,index)=>(
-          <p key={index}>{value.message}</p>
+          <p key={index}>{value.message}<span className="userName"> id:{value.userName}</span></p>
         ))}
         <form onSubmit={sendChat}>
           <input
